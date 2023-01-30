@@ -4,6 +4,7 @@ import config from "config";
 import { NextFunction } from "connect";
 
 export interface UserDocument extends mongoose.Document {
+ // _id: string;
   email: string;
   name: string;
   password: string;
@@ -14,6 +15,7 @@ export interface UserDocument extends mongoose.Document {
 
 const userSchema = new mongoose.Schema(
   {
+   // _id: { type: "string", required: true, unique: true },
     email: { type: "string", required: true, unique: true },
     name: { type: "string", required: true, unique: false },
     password: { type: "string", required: true, unique: false },
@@ -47,5 +49,9 @@ userSchema.methods.comparePasswords = async function (
   return bcrypt.compare(candidatePassword, user.password).catch((e) => false);
 };
 
-const User = mongoose.model("User", userSchema);
+// userSchema.post("find", async function (next: NextFunction) {
+//   let user = this as unknown as UserDocument;
+// })
+
+const User = mongoose.model<UserDocument>("User", userSchema);
 export default User;
